@@ -10,7 +10,7 @@ namespace Ex05
         private readonly GameSetupWindow r_gameSetupWindow = new GameSetupWindow();
         private int r_NumberOfGuesses;
         private readonly Dictionary<int ,ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int ,ButtonCollectionForSingleGuess>();
-
+        private int m_CurrentGuessNumber = 1;
 
 
         public MainGameWindow()
@@ -37,6 +37,7 @@ namespace Ex05
                     Controls.Add(button);
                 }
             }
+
         }
     }
 }

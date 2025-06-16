@@ -12,6 +12,8 @@ namespace Ex05
         {
             MainGameWindow mainGameWindow = new MainGameWindow();
             mainGameWindow.ShowDialog();
+            ColorChoiseWindow colorChoiseWindow = new ColorChoiseWindow();
+            colorChoiseWindow.ShowDialog();
         }
     }
 }
