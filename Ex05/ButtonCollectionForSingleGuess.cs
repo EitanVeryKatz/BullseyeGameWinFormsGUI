@@ -9,6 +9,7 @@ namespace Ex05
 {
     internal class ButtonCollectionForSingleGuess
     {
+        public List<Button> Buttons = new List<Button>();
         private Button m_ChoiseButton1 = new Button();
         private Button m_ChoiseButton2 = new Button();
         private Button m_ChoiseButton3 = new Button();
@@ -23,6 +24,16 @@ namespace Ex05
 
         public ButtonCollectionForSingleGuess(int i_Height, int i_left)
         {
+            Buttons.Add(m_ChoiseButton1);
+            Buttons.Add(m_ChoiseButton2);
+            Buttons.Add(m_ChoiseButton3);
+            Buttons.Add(m_ChoiseButton4);
+            Buttons.Add(m_SubmitButton);
+            Buttons.Add(m_ResaultButton1);
+            Buttons.Add(m_ResaultButton2);
+            Buttons.Add(m_ResaultButton3);
+            Buttons.Add(m_ResaultButton4);
+
             m_ChoiseButton1.Left = i_left + 20;
             m_ChoiseButton2.Left = m_ChoiseButton1.Right + 16;
             m_ChoiseButton3.Left = m_ChoiseButton2.Right + 16;

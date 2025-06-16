@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ex05
 {
-    internal class Program
+    public class Program
     {
-        public void Main()
+        public static void Main()
         {
             MainGameWindow mainGameWindow = new MainGameWindow();
             mainGameWindow.ShowDialog();
