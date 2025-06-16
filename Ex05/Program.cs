@@ -8,5 +8,10 @@ namespace Ex05
 {
     internal class Program
     {
+        public void Main()
+        {
+            MainGameWindow mainGameWindow = new MainGameWindow();
+            mainGameWindow.ShowDialog();
+        }
     }
 }

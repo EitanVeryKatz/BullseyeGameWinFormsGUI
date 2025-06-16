@@ -36,11 +36,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorChoiseWindow.cs" />
+    <Compile Include="ButtonCollectionForSingleGuess.cs" />
+    <Compile Include="ColorChoiseWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GameLogicManager.cs" />
-    <Compile Include="GameSetupWindow.cs" />
-    <Compile Include="MainGameWindow.cs" />
+    <Compile Include="GameSetupWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainGameWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
