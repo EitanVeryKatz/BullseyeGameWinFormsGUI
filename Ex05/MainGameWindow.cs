@@ -19,7 +19,7 @@ namespace Ex05
             StartPosition = FormStartPosition.CenterScreen;
             r_gameSetupWindow.m_StartBtn.MouseClick += M_StartBtn_MouseClick;
             r_gameSetupWindow.ShowDialog();
-            setUpGameWindow();
+            InitializeComponent();
         }
 
         private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
@@ -27,7 +27,7 @@ namespace Ex05
             r_NumberOfGuesses = r_gameSetupWindow.NumberOfGuesses;
         }
 
-        private void setUpGameWindow()
+        private void InitializeComponent()
         {
            for(int i = 0; i < r_NumberOfGuesses; i++)
             {

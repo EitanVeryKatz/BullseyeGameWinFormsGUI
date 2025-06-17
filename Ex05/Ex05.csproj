@@ -61,6 +61,9 @@
     <EmbeddedResource Include="ColorChoiseWindow.resx">
       <DependentUpon>ColorChoiseWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GameSetupWindow.resx">
+      <DependentUpon>GameSetupWindow.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
