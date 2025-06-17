@@ -31,19 +31,13 @@ namespace Ex05
             }
         }
 
-        
-
-
         public GameSetupWindow()
         {
             InitializeComponent();
             StartPosition = FormStartPosition.CenterScreen;
-            
-            
             m_CounterBtn.MouseClick += M_CounterBtn_MouseClick;
-            
             m_StartBtn.MouseClick += M_StartBtn_MouseClick;
-            m_CounterBtn.Text = $"numbe of guesses: {NumberOfGuesses}";
+            m_CounterBtn.Text = $"number of guesses: {NumberOfGuesses}";
         }
 
         private void InitializeComponent()
@@ -90,7 +84,7 @@ namespace Ex05
         private void M_CounterBtn_MouseClick(object sender, MouseEventArgs e)
         {
             NumberOfGuesses++;
-            ((Button)sender).Text = $"numbe of guesses: {NumberOfGuesses}";
+            ((Button)sender).Text = $"number of guesses: {NumberOfGuesses}";
             
         }
     }
