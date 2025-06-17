@@ -22,6 +22,7 @@ namespace Ex05
 
         private void InitializeComponent()
         {
+
             this.OptionBtnRed = new System.Windows.Forms.Button();
             this.OptionBtnGreen = new System.Windows.Forms.Button();
             this.OptionBtnBlue = new System.Windows.Forms.Button();

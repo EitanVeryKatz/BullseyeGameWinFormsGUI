@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Ex05
 {
@@ -29,6 +30,16 @@ namespace Ex05
 
         private void InitializeComponent()
         {
+           for (int i = 0; i < 4;i++)
+            {
+                Button SecretButton = new Button();
+                SecretButton.Width = 50;
+                SecretButton.Height = 50;
+                SecretButton.BackColor = Color.Black;
+                SecretButton.Left = i * 60 + 10;
+                SecretButton.Top = 40;
+                Controls.Add(SecretButton);
+            }
            for(int i = 0; i < r_NumberOfGuesses; i++)
             {
                 r_ButtonSetsForGuesses[i] = new ButtonCollectionForSingleGuess(Top+i*40, Left);
