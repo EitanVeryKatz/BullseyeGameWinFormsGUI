@@ -17,7 +17,7 @@ namespace Ex05
         {
             m_CurrentGuessNumber++;
             ButtonCollectionForSingleGuess nextGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
-            foreach(Button button in nextGuess.ChoiceButtons)
+            foreach(Button button in nextGuess.r_ChoiceButtons)
             {
                 button.Enabled = true;
             }
@@ -72,11 +72,11 @@ namespace Ex05
             {
                 int rowTop = guessRowStartY + i * (secretButtonHeight + buttonSpacing);
                 r_ButtonSetsForGuesses[i] = new ButtonCollectionForSingleGuess(rowTop, leftMargin);
-                foreach (Button button in r_ButtonSetsForGuesses[i].Buttons)
+                foreach (Button button in r_ButtonSetsForGuesses[i].r_Buttons)
                 {
                     Controls.Add(button);
                 }
-                foreach(Button choiceButton in r_ButtonSetsForGuesses[i].ChoiceButtons)
+                foreach(Button choiceButton in r_ButtonSetsForGuesses[i].r_ChoiceButtons)
                 {
                     choiceButton.Click += ChoiceButton_Click;
                 }

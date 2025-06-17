@@ -9,20 +9,23 @@ namespace Ex05
 {
     internal class ButtonCollectionForSingleGuess
     {
-        public List<Button> Buttons = new List<Button>();
-        public List<Button> ChoiceButtons = new List<Button>();
+        public readonly List<Button> r_Buttons = new List<Button>();
+        public readonly List<Button> r_ChoiceButtons = new List<Button>();
+
         private Button m_ChoiceButton1 = new Button();
         private Button m_ChoiceButton2 = new Button();
         private Button m_ChoiceButton3 = new Button();
         private Button m_ChoiceButton4 = new Button();
         
         private Button m_SubmitButton = new Button();
+        
 
         private Button m_ResultButton1 = new Button();
         private Button m_ResultButton2 = new Button();
         private Button m_ResultButton3 = new Button();
         private Button m_ResultButton4 = new Button();
 
+        public Button SubmitButton {  get { return m_SubmitButton; } }
 
         public ButtonCollectionForSingleGuess(int i_Height, int i_left)
         {
@@ -60,20 +63,20 @@ namespace Ex05
             m_ChoiceButton3.Top = i_Height;
             m_ChoiceButton4.Top = i_Height;
 
-            Buttons.Add(m_ChoiceButton1);
-            Buttons.Add(m_ChoiceButton2);
-            Buttons.Add(m_ChoiceButton3);
-            Buttons.Add(m_ChoiceButton4);
-            Buttons.Add(m_SubmitButton);
-            Buttons.Add(m_ResultButton1);
-            Buttons.Add(m_ResultButton2);
-            Buttons.Add(m_ResultButton3);
-            Buttons.Add(m_ResultButton4);
+            r_Buttons.Add(m_ChoiceButton1);
+            r_Buttons.Add(m_ChoiceButton2);
+            r_Buttons.Add(m_ChoiceButton3);
+            r_Buttons.Add(m_ChoiceButton4);
+            r_Buttons.Add(m_SubmitButton);
+            r_Buttons.Add(m_ResultButton1);
+            r_Buttons.Add(m_ResultButton2);
+            r_Buttons.Add(m_ResultButton3);
+            r_Buttons.Add(m_ResultButton4);
 
-            ChoiceButtons.Add(m_ChoiceButton1);
-            ChoiceButtons.Add(m_ChoiceButton2);
-            ChoiceButtons.Add(m_ChoiceButton3);
-            ChoiceButtons.Add(m_ChoiceButton4);
+            r_ChoiceButtons.Add(m_ChoiceButton1);
+            r_ChoiceButtons.Add(m_ChoiceButton2);
+            r_ChoiceButtons.Add(m_ChoiceButton3);
+            r_ChoiceButtons.Add(m_ChoiceButton4);
 
             m_SubmitButton.Width = 50;
             m_SubmitButton.Height = buttonHeight;
