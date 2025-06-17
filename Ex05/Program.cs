@@ -10,10 +10,11 @@ namespace Ex05
     {
         public static void Main()
         {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.ShowDialog();
             MainGameWindow mainGameWindow = new MainGameWindow();
             mainGameWindow.ShowDialog();
-            ColorChoiseWindow colorChoiseWindow = new ColorChoiseWindow();
-            colorChoiseWindow.ShowDialog();
+            
         }
     }
 }
