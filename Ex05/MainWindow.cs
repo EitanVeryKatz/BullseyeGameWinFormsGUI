@@ -12,7 +12,7 @@ namespace Ex05
 {
     public partial class MainWindow : Form
     {
-        ColorChoiseWindow colorChoiseWindow = new ColorChoiseWindow();
+        ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow();
         Button ChosenButtonColorCoiceButton;
         private readonly GameSetupWindow r_gameSetupWindow = new GameSetupWindow();
         private int r_NumberOfGuesses;
@@ -30,7 +30,7 @@ namespace Ex05
         private void OptionBtn_MouseClick(object sender, MouseEventArgs e)
         {
             ChosenButtonColorCoiceButton = sender as Button;
-            colorChoiseWindow.ShowDialog();
+            colorChoiceWindow.ShowDialog();
         }
 
         private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)

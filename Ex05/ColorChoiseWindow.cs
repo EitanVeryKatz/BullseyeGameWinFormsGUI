@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Ex05
 {
-    internal class ColorChoiseWindow:Form
+    internal class ColorChoiceWindow:Form
     {
 
         private Button OptionBtnRed;
@@ -105,7 +105,7 @@ namespace Ex05
             this.OptionBtnOrange.TabIndex = 6;
             this.OptionBtnOrange.UseVisualStyleBackColor = false;
             // 
-            // ColorChoiseWindow
+            // ColorChoiceWindow
             // 
             this.ClientSize = new System.Drawing.Size(225, 129);
             this.Controls.Add(this.OptionBtnRed);
@@ -116,13 +116,13 @@ namespace Ex05
             this.Controls.Add(this.OptionBtnGray);
             this.Controls.Add(this.OptionBtnOrange);
             this.Controls.Add(this.OptionBtnBrown);
-            this.Name = "ColorChoiseWindow";
+            this.Name = "ColorChoiceWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ResumeLayout(false);
 
         }
     
-        public ColorChoiseWindow()
+        public ColorChoiceWindow()
         {
             InitializeComponent();
         }
