@@ -9,9 +9,19 @@ namespace Ex05
     {
         private readonly GameLogicManager r_LogicManager = new GameLogicManager();
         private readonly GameSetupWindow r_gameSetupWindow = new GameSetupWindow();
-        private int r_NumberOfGuesses;
+        private int r_NumberOfGuesses = 0;
         private readonly Dictionary<int, ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int, ButtonCollectionForSingleGuess>();
-        private int m_CurrentGuessNumber = 1;
+        private int m_CurrentGuessNumber = -1;
+
+        private void startNextGuess()
+        {
+            m_CurrentGuessNumber++;
+            ButtonCollectionForSingleGuess nextGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
+            foreach(Button button in nextGuess.ChoiceButtons)
+            {
+                button.Enabled = true;
+            }
+        }
 
         public MainGameWindow()
         {
@@ -19,7 +29,13 @@ namespace Ex05
             StartPosition = FormStartPosition.CenterScreen;
             r_gameSetupWindow.m_StartBtn.MouseClick += M_StartBtn_MouseClick;
             r_gameSetupWindow.ShowDialog();
+            if (r_NumberOfGuesses == 0)
+            {
+                throw new Exception();
+            }
             InitializeComponent();
+            r_LogicManager.GenerateSequence();
+            startNextGuess();
         }
 
         private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
@@ -46,6 +62,7 @@ namespace Ex05
                 SecretButton.BackColor = Color.Black;
                 SecretButton.Left = leftMargin + i * (secretButtonWidth + buttonSpacing);
                 SecretButton.Top = topMargin;
+                SecretButton.Enabled = false;
                 Controls.Add(SecretButton);
             }
 
@@ -59,11 +76,21 @@ namespace Ex05
                 {
                     Controls.Add(button);
                 }
+                foreach(Button choiceButton in r_ButtonSetsForGuesses[i].ChoiceButtons)
+                {
+                    choiceButton.Click += ChoiceButton_Click;
+                }
             }
 
             int totalHeight = guessRowStartY + r_NumberOfGuesses * (secretButtonHeight + buttonSpacing) + topMargin;
             int totalWidth = leftMargin + 4 * (secretButtonWidth + buttonSpacing) + leftMargin;
             this.ClientSize = new Size(totalWidth, totalHeight);
+        }
+
+        private void ChoiceButton_Click(object sender, EventArgs e)
+        {
+            ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button);
+            colorChoiceWindow.ShowDialog();
         }
     }
 }

@@ -12,9 +12,13 @@ namespace Ex05
         {
             //MainWindow mainWindow = new MainWindow();
             //mainWindow.ShowDialog();
-            MainGameWindow mainGameWindow = new MainGameWindow();
-            mainGameWindow.ShowDialog();
-            
+            try
+            {
+                MainGameWindow mainGameWindow = new MainGameWindow();
+                mainGameWindow.ShowDialog();
+            } catch (Exception)
+            {
+            }
         }
     }
 }

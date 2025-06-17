@@ -19,7 +19,7 @@ namespace Ex05
         private Button OptionBtnGray;
         private Button OptionBtnBrown;
         private Button OptionBtnOrange;
-
+        private readonly Button r_ChosenButton;
         private void InitializeComponent()
         {
 
@@ -122,11 +122,21 @@ namespace Ex05
 
         }
     
-        public ColorChoiceWindow()
+        public ColorChoiceWindow(Button i_ChosenButton)
         {
             InitializeComponent();
+            foreach (Button ColorButton in Controls)
+            {
+                ColorButton.Click += ColorButton_Click;
+            }
+            r_ChosenButton = i_ChosenButton;
         }
 
-       
+        private void ColorButton_Click(object sender, EventArgs e)
+        {
+            Button ChosenColor = sender as Button;
+            r_ChosenButton.BackColor = ChosenColor.BackColor;
+            Close();
+        }
     }
 }
