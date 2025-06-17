@@ -14,8 +14,12 @@ namespace Ex05
     {
         ColorChoiseWindow colorChoiseWindow = new ColorChoiseWindow();
         Button ChosenButtonColorCoiceButton;
+        private readonly GameSetupWindow r_gameSetupWindow = new GameSetupWindow();
+        private int r_NumberOfGuesses;
         public MainWindow()
         {
+            r_gameSetupWindow.m_StartBtn.MouseClick += M_StartBtn_MouseClick;
+            r_gameSetupWindow.ShowDialog();
             InitializeComponent();
             foreach(Button btn in Controls)
             {
@@ -29,6 +33,9 @@ namespace Ex05
             colorChoiseWindow.ShowDialog();
         }
 
-        
+        private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            r_NumberOfGuesses = r_gameSetupWindow.NumberOfGuesses;
+        }
     }
 }
