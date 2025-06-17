@@ -115,6 +115,7 @@ namespace Ex05
             this.Controls.Add(this.OptionBtnGray);
             this.Controls.Add(this.OptionBtnOrange);
             this.Controls.Add(this.OptionBtnBrown);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ColorChoiseWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ResumeLayout(false);
