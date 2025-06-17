@@ -10,9 +10,8 @@ namespace Ex05
         private readonly GameLogicManager r_LogicManager = new GameLogicManager();
         private readonly GameSetupWindow r_gameSetupWindow = new GameSetupWindow();
         private int r_NumberOfGuesses;
-        private readonly Dictionary<int ,ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int ,ButtonCollectionForSingleGuess>();
+        private readonly Dictionary<int, ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int, ButtonCollectionForSingleGuess>();
         private int m_CurrentGuessNumber = 1;
-
 
         public MainGameWindow()
         {
@@ -30,25 +29,41 @@ namespace Ex05
 
         private void InitializeComponent()
         {
-           for (int i = 0; i < 4;i++)
+            int secretButtonWidth = 50;
+            int secretButtonHeight = 50;
+            int buttonSpacing = 10;
+            int leftMargin = 10;
+            int topMargin = 20;
+
+            this.AutoSize = true;
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+            for (int i = 0; i < 4; i++)
             {
                 Button SecretButton = new Button();
-                SecretButton.Width = 50;
-                SecretButton.Height = 50;
+                SecretButton.Width = secretButtonWidth;
+                SecretButton.Height = secretButtonHeight;
                 SecretButton.BackColor = Color.Black;
-                SecretButton.Left = i * 60 + 10;
-                SecretButton.Top = 40;
+                SecretButton.Left = leftMargin + i * (secretButtonWidth + buttonSpacing);
+                SecretButton.Top = topMargin;
                 Controls.Add(SecretButton);
             }
-           for(int i = 0; i < r_NumberOfGuesses; i++)
+
+            int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing;
+
+            for (int i = 0; i < r_NumberOfGuesses; i++)
             {
-                r_ButtonSetsForGuesses[i] = new ButtonCollectionForSingleGuess(Top+i*40, Left);
-                foreach(Button button in r_ButtonSetsForGuesses[i].Buttons)
+                int rowTop = guessRowStartY + i * (secretButtonHeight + buttonSpacing);
+                r_ButtonSetsForGuesses[i] = new ButtonCollectionForSingleGuess(rowTop, leftMargin);
+                foreach (Button button in r_ButtonSetsForGuesses[i].Buttons)
                 {
                     Controls.Add(button);
                 }
             }
 
+            int totalHeight = guessRowStartY + r_NumberOfGuesses * (secretButtonHeight + buttonSpacing) + topMargin;
+            int totalWidth = leftMargin + 4 * (secretButtonWidth + buttonSpacing) + leftMargin;
+            this.ClientSize = new Size(totalWidth, totalHeight);
         }
     }
 }
