@@ -33,6 +33,16 @@ namespace Ex05
             m_ChoiceButton3.Width = buttonWidth;
             m_ChoiceButton4.Width = buttonWidth;
 
+            m_ChoiceButton1.Enabled = false;
+            m_ChoiceButton2.Enabled = false;
+            m_ChoiceButton3.Enabled = false;
+            m_ChoiceButton4.Enabled = false;
+            m_SubmitButton.Enabled = false;
+            m_ResultButton1.Enabled = false;
+            m_ResultButton2.Enabled = false;
+            m_ResultButton3.Enabled = false;
+            m_ResultButton4.Enabled = false;
+
             m_ChoiceButton1.Height = buttonHeight;
             m_ChoiceButton2.Height = buttonHeight;
             m_ChoiceButton3.Height = buttonHeight;
