@@ -1,18 +1,20 @@
-﻿ליצור תרגום בתוך MAINGAMEWINDOM שימיר מצבעים לצ'ארים ולהפך
+﻿
 
-להוסיף ENABLE לכפתור של הSUBMIT כאשר הניחוש נבדק והוא תקין
+אם נגמר המשחק חושפים את הניחוש האמיתי בעדכון צבעי כפתורים 
 
-
-
-RESULTS מתעדכן רק אחרי
-SUBMIT
-
-
-סבמיט מבטל את הENABLE של כל הפתורים בשורה שלו
-
-לקבל את הHIT MISS מהלוגיק ואז לקבוע את צבעי הכפתורים של RESULT בהתאם
-אם נגמר המשחק חושפים את הניחוש האמיתי בעדכון צבעי כפתורים SEQUENCE
-אם לא נגמר המשחק, נבצע ENABLE לניחוש הבא ונכבה את הניחוש הנוכחי
-
+להוסיף בדיקה והודעה של ניצחון או הפסד
 
 לעבור על ההערות של גיארו
+
+לשפר נראות כללית של המשחק
+
+
+
+
+-converted all chars to enum SequenceItem
+-created translation both ways
+-checked for valid guess
+-fixed some guyro conventions in variables names in logic manager
+
+-updated results in result buttons
+-checked each guess for misses and hits

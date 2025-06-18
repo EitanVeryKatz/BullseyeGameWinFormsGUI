@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Ex05
 {
@@ -11,21 +12,24 @@ namespace Ex05
     {
         public readonly List<Button> r_Buttons = new List<Button>();
         public readonly List<Button> r_ChoiceButtons = new List<Button>();
+        public List<Button> r_ResultButtons { get; } = new List<Button>();
 
         private Button m_ChoiceButton1 = new Button();
         private Button m_ChoiceButton2 = new Button();
         private Button m_ChoiceButton3 = new Button();
         private Button m_ChoiceButton4 = new Button();
-        
+
         private Button m_SubmitButton = new Button();
-        
 
         private Button m_ResultButton1 = new Button();
         private Button m_ResultButton2 = new Button();
         private Button m_ResultButton3 = new Button();
         private Button m_ResultButton4 = new Button();
 
-        public Button SubmitButton {  get { return m_SubmitButton; } }
+        public Button SubmitButton
+        {
+            get { return m_SubmitButton; }
+        }
 
         public ButtonCollectionForSingleGuess(int i_Height, int i_left)
         {
@@ -78,6 +82,11 @@ namespace Ex05
             r_ChoiceButtons.Add(m_ChoiceButton3);
             r_ChoiceButtons.Add(m_ChoiceButton4);
 
+            r_ResultButtons.Add(m_ResultButton1);
+            r_ResultButtons.Add(m_ResultButton2);
+            r_ResultButtons.Add(m_ResultButton3);
+            r_ResultButtons.Add(m_ResultButton4);
+
             m_SubmitButton.Width = 50;
             m_SubmitButton.Height = buttonHeight;
             m_SubmitButton.Left = m_ChoiceButton4.Left + buttonWidth + buttonSpacing;
@@ -111,6 +120,5 @@ namespace Ex05
             m_ResultButton4.Text = "4";
             m_SubmitButton.Text = "-->";
         }
-
     }
 }
