@@ -12,6 +12,7 @@ namespace Ex05
         private int r_NumberOfGuesses = 0;
         private readonly Dictionary<int, ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int, ButtonCollectionForSingleGuess>();
         private int m_CurrentGuessNumber = -1;
+        private Dictionary<Color,char> r_ColorsToChars = new Dictionary<Color,char>();
 
         private void startNextGuess()
         {
@@ -91,6 +92,27 @@ namespace Ex05
         {
             ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button);
             colorChoiceWindow.ShowDialog();
+            if (isValidCurrentGuess())
+            {
+                r_ButtonSetsForGuesses[m_CurrentGuessNumber].SubmitButton.Enabled = true;
+            }
+        }
+
+        private bool isValidCurrentGuess()//////////////////////add logic
+        {
+            bool res = false;
+            char[] encodedGuess = new char[4];
+            int ButtonIndex = 0;
+            foreach (Button guessButton in r_ButtonSetsForGuesses[m_CurrentGuessNumber].r_ChoiceButtons)
+            {
+                encodedGuess[ButtonIndex] = r_ColorsToChars[guessButton.BackColor];////initialize dictionary and handle default color
+            }
+            if(r_LogicManager.SequenceHasNoDuplicates(encodedGuess))
+            {
+                res = true
+            }
+
+            return res;
         }
     }
 }
