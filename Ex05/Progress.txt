@@ -18,3 +18,5 @@
 
 -updated results in result buttons
 -checked each guess for misses and hits
+
+-fixed size of buttons

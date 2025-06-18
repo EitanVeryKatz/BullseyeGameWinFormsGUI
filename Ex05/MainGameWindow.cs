@@ -46,11 +46,11 @@ namespace Ex05
 
         private void InitializeComponent()
         {
-            int secretButtonWidth = 50;
-            int secretButtonHeight = 50;
+            int secretButtonWidth = 40;
+            int secretButtonHeight = 40;
             int buttonSpacing = 10;
             int leftMargin = 10;
-            int topMargin = 20;
+            int topMargin = 15;
 
             this.AutoSize = true;
             this.MaximizeBox = false;
@@ -69,8 +69,9 @@ namespace Ex05
                 SecretButton.Enabled = false;
                 Controls.Add(SecretButton);
             }
+            
 
-            int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing;
+            int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing + 5;
 
             for (int i = 0; i < r_NumberOfGuesses; i++)
             {
@@ -201,7 +202,7 @@ namespace Ex05
             {
                 if (i - guess.Hits < guess.Misses)
                 {
-                    i_Guess.r_ResultButtons[i].BackColor = Color.White; // Yellow for misses
+                    i_Guess.r_ResultButtons[i].BackColor = Color.Yellow; // Yellow for misses
                 }
                 else
                 {
