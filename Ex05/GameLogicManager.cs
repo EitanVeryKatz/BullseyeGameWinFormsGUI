@@ -30,9 +30,10 @@ namespace Ex05
 
         public List<Guess> m_guessList = new List<Guess>();
             private Random m_sequenceItemRandomizer = new Random();
-        private SequenceItem[] m_secretsequence = new SequenceItem[k_AmountOfItemsInSequence];
+        public SequenceItem[] m_secretsequence = new SequenceItem[k_AmountOfItemsInSequence];
         public int MaxGuesses { get; set; }
         public int CurrentGuessCount { get; private set; }
+
 
         public class Guess
         {

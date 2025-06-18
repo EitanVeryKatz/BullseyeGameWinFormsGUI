@@ -1,8 +1,5 @@
 ﻿
 
-אם נגמר המשחק חושפים את הניחוש האמיתי בעדכון צבעי כפתורים 
-
-להוסיף בדיקה והודעה של ניצחון או הפסד
 
 לעבור על ההערות של גיארו
 
@@ -20,3 +17,8 @@
 -checked each guess for misses and hits
 
 -fixed size of buttons
+
+-made the secret sequence appear in the end of the game
+-fixed the logic of enabling and disabling buttons
+-removed the duplicte error message, win/lose messages
+-sorted colorchoiceWindow into smaller methods

@@ -16,10 +16,6 @@ namespace Ex05
 
         private void startNextGuess()
         {
-            if (m_CurrentGuessNumber >= 0)
-            {
-                disableChoiceButtonsForCurrentGuess(); // disable the choice buttons of the previous guess
-            }
             m_CurrentGuessNumber++;
             enableChoiceButtonsForCurrentGuess();// enable the choice buttons for the next guess
         }
@@ -69,7 +65,7 @@ namespace Ex05
                 SecretButton.Enabled = false;
                 Controls.Add(SecretButton);
             }
-            
+
 
             int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing + 5;
 
@@ -97,24 +93,29 @@ namespace Ex05
         {
             ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button);
             colorChoiceWindow.ShowDialog();
-            enableSubmitButtonIfLastChoiceButton(sender as Button);
+            enableSubmitButtonIfGuessFilledAndValid();
         }
 
-        // if the current choice button is the last one in the row, it will enable the submit button
-        private void enableSubmitButtonIfLastChoiceButton(Button i_ChoiceButton)
+        // if the current row doesnt contain empty buttons and the guess is valid, it will enable the submit button
+        private void enableSubmitButtonIfGuessFilledAndValid()
         {
-            if (!isGuessValid(r_ButtonSetsForGuesses[m_CurrentGuessNumber]))
+            ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
+            bool allButtonsFilled = true;
+            foreach (Button button in currentGuess.r_ChoiceButtons)//search for empty buttons in the current guess
             {
-                MessageBox.Show("Invalid guess! Please choose a sequence with no duplicates.", "Invalid Guess", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (button.BackColor == SystemColors.Control)
+                {
+                    allButtonsFilled = false;
+                    break;
+                }
+            }
+            if (allButtonsFilled && isGuessValid(currentGuess))
+            {
+                currentGuess.SubmitButton.Enabled = true;
             }
             else
             {
-                ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
-                if (currentGuess.r_ChoiceButtons.IndexOf(i_ChoiceButton) == currentGuess.r_ChoiceButtons.Count - 1)
-                {
-                    currentGuess.SubmitButton.Enabled = true;
-                }
+                currentGuess.SubmitButton.Enabled = false;
             }
         }
 
@@ -170,25 +171,21 @@ namespace Ex05
             }
             r_LogicManager.CheckGuess(guessItems);
 
+            if (m_CurrentGuessNumber >= 0)// if this is not the first guess, disable the choice buttons of the previous guess
+            {
+                disableChoiceButtonsForCurrentGuess(); // disable the choice buttons of the previous guess
+                r_ButtonSetsForGuesses[m_CurrentGuessNumber].SubmitButton.Enabled = false; // disable the submit button of the previous guess
 
-            //if (r_LogicManager.CheckLoss())
-            //{
-            //    MessageBox.Show("You lost! Try again.", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    Close();
-            //}
-            //else if (r_LogicManager.CheckWin())
-            //{
-            //    MessageBox.Show("Congratulations! You guessed the sequence!", "You Win!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //    Close();
-            //}
-            //else
-            //{
-            //    updateResultButtons(currentGuess); // Update the result buttons with hits and misses
-            //    startNextGuess();
-            //}
-
+            }
             updateResultButtons(currentGuess); // Update the result buttons with hits and misses
-            startNextGuess();
+            if (m_CurrentGuessNumber + 1 >= r_NumberOfGuesses || r_LogicManager.CheckWin())//lose or win
+            {
+                setSecretButtonsToCorrectSequence(); // Set the secret buttons to the correct sequence
+            }
+            else
+            {
+                startNextGuess();
+            }
         }
         // Update the result buttons with hits and misses
         private void updateResultButtons(ButtonCollectionForSingleGuess i_Guess)
@@ -208,6 +205,15 @@ namespace Ex05
                 {
                     i_Guess.r_ResultButtons[i].BackColor = Color.Empty; // Empty for no hits or misses
                 }
+            }
+        }
+        //set the background color of the secret buttons to the correct sequence
+        private void setSecretButtonsToCorrectSequence()
+        {
+            for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
+            {
+                Button secretButton = Controls[i] as Button; // Assuming the first 4 buttons are the secret buttons
+                secretButton.BackColor = getColorFromSequenceItem(r_LogicManager.m_secretsequence[i]);
             }
         }
     }
