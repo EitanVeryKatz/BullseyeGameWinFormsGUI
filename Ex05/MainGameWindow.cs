@@ -102,7 +102,7 @@ namespace Ex05
             {
                 int rowTop = guessRowStartY + i * (secretButtonHeight + buttonSpacing);
                 r_ButtonSetsForGuesses[i] = new ButtonCollectionForSingleGuess(rowTop, leftMargin);
-                foreach (Button button in r_ButtonSetsForGuesses[i].r_Buttons)
+                foreach (Button button in r_ButtonSetsForGuesses[i].r_AllButtons)
                 {
                     Controls.Add(button);
                 }
