@@ -1,0 +1,25 @@
+﻿
+
+
+לעבור על ההערות של גיארו
+
+לשפר נראות כללית של המשחק
+
+
+
+
+-converted all chars to enum SequenceItem
+-created translation both ways
+-checked for valid guess
+-fixed some guyro conventions in variables names in logic manager
+
+-updated results in result buttons
+-checked each guess for misses and hits
+
+-fixed size of buttons
+
+-made the secret sequence appear in the end of the game
+-fixed the logic of enabling and disabling buttons
+-removed the duplicte error message, win/lose messages
+-sorted colorchoiceWindow into smaller methods
+-moved the translation to the MainGameWindow

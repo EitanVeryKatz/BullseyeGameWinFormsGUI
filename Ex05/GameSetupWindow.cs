@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,11 +8,13 @@ using System.Windows.Forms;
 
 namespace Ex05
 {
-    internal class GameSetupWindow:Form
+    internal class GameSetupWindow : Form
     {
         public Button m_StartBtn;
         private Button m_CounterBtn;
         private int m_NumberOfGuesses = 4;
+        private GameLogicManager m_GameLogic;
+
         public int NumberOfGuesses
         {
             get
@@ -20,30 +23,32 @@ namespace Ex05
             }
             private set
             {
-                if (value>10)
+                if (value > 10)
                 {
-                    m_NumberOfGuesses = value%10+3;
+                    m_NumberOfGuesses = value % 10 + 3;
                 }
                 else
                 {
-                    m_NumberOfGuesses=value;
+                    m_NumberOfGuesses = value;
                 }
             }
         }
 
-        
-
-
         public GameSetupWindow()
         {
             InitializeComponent();
+            this.ResumeLayout(false);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
-            
-            
             m_CounterBtn.MouseClick += M_CounterBtn_MouseClick;
-            
             m_StartBtn.MouseClick += M_StartBtn_MouseClick;
-            m_CounterBtn.Text = $"numbe of guesses: {NumberOfGuesses}";
+            m_CounterBtn.Text = $"number of guesses: {NumberOfGuesses}";
+            m_CounterBtn.Font= new Font("Arial", 10, FontStyle.Bold);
+            m_StartBtn.Font = new Font("Arial", 10, FontStyle.Bold);
+            m_GameLogic = new GameLogicManager();
         }
 
         private void InitializeComponent()
@@ -84,14 +89,14 @@ namespace Ex05
 
         private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
         {
+            m_GameLogic.MaxGuesses = NumberOfGuesses;
             Close();
         }
 
         private void M_CounterBtn_MouseClick(object sender, MouseEventArgs e)
         {
             NumberOfGuesses++;
-            ((Button)sender).Text = $"numbe of guesses: {NumberOfGuesses}";
-            
+            ((Button)sender).Text = $"number of guesses: {NumberOfGuesses}";
         }
     }
 }
