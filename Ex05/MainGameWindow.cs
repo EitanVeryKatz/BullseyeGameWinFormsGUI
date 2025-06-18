@@ -109,7 +109,7 @@ namespace Ex05
             }
             if(r_LogicManager.SequenceHasNoDuplicates(encodedGuess))
             {
-                res = true
+                res = true;
             }
 
             return res;
