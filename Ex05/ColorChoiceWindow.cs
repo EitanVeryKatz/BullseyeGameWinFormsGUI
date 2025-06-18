@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Ex05
@@ -23,6 +24,12 @@ namespace Ex05
             this.ClientSize = new Size(225, 129);
             this.StartPosition = FormStartPosition.CenterParent;
             this.Name = nameof(ColorChoiceWindow);
+            this.ResumeLayout(false);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.ShowInTaskbar = false;
+            this.Text = "Pick A Color:";
         }
 
         private void createColorButtons()
@@ -46,7 +53,6 @@ namespace Ex05
                 Location = new Point(x, y),
                 UseVisualStyleBackColor = false
             };
-
             button.Click += ColorButton_Click;
             r_ColorButtons.Add(button);
         }
@@ -65,5 +71,6 @@ namespace Ex05
             r_ChosenButton.BackColor = chosenColor.BackColor;
             Close();
         }
+        
     }
 }

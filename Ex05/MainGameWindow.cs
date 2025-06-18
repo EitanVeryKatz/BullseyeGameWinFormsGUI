@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using static Ex05.GameLogicManager;
@@ -56,6 +57,9 @@ namespace Ex05
             this.MinimizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            this.Icon = new Icon(Path.Combine(Application.StartupPath, "bullseye.ico"));
+
+
 
             for (int i = 0; i < r_LogicManager.m_secretsequence.Length; i++)
             {

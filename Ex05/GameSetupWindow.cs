@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,10 +37,17 @@ namespace Ex05
         public GameSetupWindow()
         {
             InitializeComponent();
+            this.ResumeLayout(false);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             m_CounterBtn.MouseClick += M_CounterBtn_MouseClick;
             m_StartBtn.MouseClick += M_StartBtn_MouseClick;
             m_CounterBtn.Text = $"number of guesses: {NumberOfGuesses}";
+            m_CounterBtn.Font= new Font("Arial", 10, FontStyle.Bold);
+            m_StartBtn.Font = new Font("Arial", 10, FontStyle.Bold);
             m_GameLogic = new GameLogicManager();
         }
 
