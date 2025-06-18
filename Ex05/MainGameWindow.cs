@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using static Ex05.GameLogicManager;
 
@@ -15,7 +16,9 @@ namespace Ex05
         private int r_NumberOfGuesses = 0;
         private readonly Dictionary<int, ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int, ButtonCollectionForSingleGuess>();
         private int m_CurrentGuessNumber = -1;
-
+        private readonly Dictionary<Color, GameLogicManager.SequenceItem> r_ColorsToSequanceItems = new Dictionary<Color, SequenceItem>();
+        private readonly Dictionary<GameLogicManager.SequenceItem, Color> r_SetuanceItemsToColors = new Dictionary<SequenceItem, Color>();
+        
         private void startNextGuess()
         {
             m_CurrentGuessNumber++;
@@ -34,8 +37,30 @@ namespace Ex05
                 throw new Exception();
             }
             InitializeComponent();
+            setColorsForGame();
             r_LogicManager.GenerateSequence();
             startNextGuess();
+        }
+
+        private void setColorsForGame()
+        {
+            
+          
+
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.A] = Color.Gold;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.B] = Color.Red;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.C] = Color.Blue;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.D] = Color.Green;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.E] = Color.Magenta;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.F] = Color.DeepSkyBlue;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.G] = Color.DarkGray;
+            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.H] = Color.Tomato;
+
+            foreach(KeyValuePair<GameLogicManager.SequenceItem,Color> translationPair in r_SetuanceItemsToColors)
+            {
+                r_ColorsToSequanceItems[translationPair.Value] = translationPair.Key;
+            }
+
         }
 
         private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
@@ -95,7 +120,7 @@ namespace Ex05
 
         private void ChoiceButton_Click(object sender, EventArgs e)
         {
-            ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button);
+            ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button,r_SetuanceItemsToColors.Values.ToArray());
             colorChoiceWindow.ShowDialog();
             enableSubmitButtonIfGuessFilledAndValid();
         }
@@ -124,57 +149,23 @@ namespace Ex05
         }
 
         // Convert button color to SequenceItem
-        private GameLogicManager.SequenceItem getSequenceItemFromButtonColor(Button i_Button)
-        {
-            Color buttonColor = i_Button.BackColor;
-            return GetSequenceItemFromColor(buttonColor);
-        }
+        
 
         // Convert SequenceItem to color
-        private Color getColorFromSequenceItem(GameLogicManager.SequenceItem item)
-        {
-            return GetColorFromSequenceItem(item);
-        }
+      
         // translate the color of the button to the chars of the game logic (A-H)
-        public GameLogicManager.SequenceItem GetSequenceItemFromColor(Color color)
-        {
-            if (color == Color.Red) return GameLogicManager.SequenceItem.A;
-            if (color == Color.Green) return GameLogicManager.SequenceItem.B;
-            if (color == Color.Blue) return GameLogicManager.SequenceItem.C;
-            if (color == Color.Yellow) return GameLogicManager.SequenceItem.D;
-            if (color == Color.Purple) return GameLogicManager.SequenceItem.E;
-            if (color == Color.Gray) return GameLogicManager.SequenceItem.F;
-            if (color == Color.Brown) return     GameLogicManager.SequenceItem.G;
-            if (color == Color.Orange) return GameLogicManager.SequenceItem.H;
-            if (color == Color.Beige) return GameLogicManager.SequenceItem.N;
-
-            throw new ArgumentException($"Unknown color for game logic mapping. Color: {color}");
-        }
+       
 
         // translate the SequenceItem of the game logic (A-H) to the color of the button
-        public Color GetColorFromSequenceItem(SequenceItem item)
-        {
-            switch (item)
-            {
-                case GameLogicManager.SequenceItem.A: return Color.Red;
-                case GameLogicManager.SequenceItem.B: return Color.Green;
-                case GameLogicManager.SequenceItem.C: return Color.Blue;
-                case GameLogicManager.SequenceItem.D: return Color.Yellow;
-                case GameLogicManager.SequenceItem.E: return Color.Purple;
-                case GameLogicManager.SequenceItem.F: return Color.Gray;
-                case GameLogicManager.SequenceItem.G: return Color.Brown;
-                case GameLogicManager.SequenceItem.H: return Color.Orange;
-                case GameLogicManager.SequenceItem.N: return Color.Beige;
-                default: throw new ArgumentException("Unknown SequenceItem for game logic mapping.");
-            }
-        }
+        
         // Check if the guess is valid
         private bool isGuessValid(ButtonCollectionForSingleGuess i_Guess)
         {
             GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
-                guessItems[i] = getSequenceItemFromButtonColor(i_Guess.r_ChoiceButtons[i]);
+                guessItems[i] = r_ColorsToSequanceItems[i_Guess.r_ChoiceButtons[i].BackColor];
+                
             }
             return r_LogicManager.SequenceHasNoDuplicates(guessItems);
         }
@@ -203,7 +194,8 @@ namespace Ex05
             GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
-                guessItems[i] = getSequenceItemFromButtonColor(currentGuess.r_ChoiceButtons[i]);// convert button color to SequenceItem
+                guessItems[i] = r_ColorsToSequanceItems[currentGuess.r_ChoiceButtons[i].BackColor];
+                // convert button color to SequenceItem
             }
             r_LogicManager.CheckGuess(guessItems);
 
@@ -249,7 +241,7 @@ namespace Ex05
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 Button secretButton = Controls[i] as Button; // Assuming the first 4 buttons are the secret buttons
-                secretButton.BackColor = getColorFromSequenceItem(r_LogicManager.m_secretsequence[i]);
+                secretButton.BackColor = r_SetuanceItemsToColors[r_LogicManager.m_secretsequence[i]];
             }
         }
     }

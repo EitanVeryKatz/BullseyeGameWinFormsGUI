@@ -11,11 +11,11 @@ namespace Ex05
         private readonly Button r_ChosenButton;
         private readonly List<Button> r_ColorButtons = new List<Button>();
 
-        public ColorChoiceWindow(Button i_ChosenButton)
+        public ColorChoiceWindow(Button i_ChosenButton,Color[] i_colors)
         {
             r_ChosenButton = i_ChosenButton;
             initializeForm();
-            createColorButtons();
+            createColorButtons(i_colors);
             addColorButtonsToForm();
         }
 
@@ -32,16 +32,16 @@ namespace Ex05
             this.Text = "Pick A Color:";
         }
 
-        private void createColorButtons()
+        private void createColorButtons(Color[] i_colors)
         {
-            addColorButton(Color.Brown, 12, 19);
-            addColorButton(Color.Green, 62, 19);
-            addColorButton(Color.Red, 115, 19);
-            addColorButton(Color.Purple, 168, 19);
-            addColorButton(Color.Yellow, 12, 70);
-            addColorButton(Color.Blue, 62, 70);
-            addColorButton(Color.Gray, 115, 70);
-            addColorButton(Color.Orange, 168, 70);
+            addColorButton(i_colors[0], 12, 19);
+            addColorButton(i_colors[1], 62, 19);
+            addColorButton(i_colors[2], 115, 19);
+            addColorButton(i_colors[3], 168, 19);
+            addColorButton(i_colors[4], 12, 70);
+            addColorButton(i_colors[5], 62, 70);
+            addColorButton(i_colors[6], 115, 70);
+            addColorButton(i_colors[7], 168, 70);
         }
 
         private void addColorButton(Color color, int x, int y)
