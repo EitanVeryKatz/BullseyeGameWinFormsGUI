@@ -22,3 +22,4 @@
 -fixed the logic of enabling and disabling buttons
 -removed the duplicte error message, win/lose messages
 -sorted colorchoiceWindow into smaller methods
+-moved the translation to the MainGameWindow

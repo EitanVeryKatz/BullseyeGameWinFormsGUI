@@ -116,12 +116,6 @@ namespace Ex05
             m_guessList.Add(guess);
         }
 
-        public bool CheckLoss()
-        {
-            bool didPlayerLose = MaxGuesses - 1 < CurrentGuessCount;
-            return didPlayerLose;
-        }
-
         public void GenerateSequence()
         {
             SequenceItem[] sequence;
@@ -142,40 +136,6 @@ namespace Ex05
                 sequence[i] = (SequenceItem)m_sequenceItemRandomizer.Next(0, 8);
             }
             return sequence;
-        }
-
-        // translate the color of the button to the chars of the game logic (A-H)
-        public SequenceItem GetSequenceItemFromColor(Color color)
-        {
-            if (color == Color.Red) return SequenceItem.A;
-            if (color == Color.Green) return SequenceItem.B;
-            if (color == Color.Blue) return SequenceItem.C;
-            if (color == Color.Yellow) return SequenceItem.D;
-            if (color == Color.Purple) return SequenceItem.E;
-            if (color == Color.Gray) return SequenceItem.F;
-            if (color == Color.Brown) return SequenceItem.G;
-            if (color == Color.Orange) return SequenceItem.H;
-            if (color == Color.Empty || color.ToArgb() == SystemColors.Control.ToArgb()) return SequenceItem.N;
-
-            throw new ArgumentException($"Unknown color for game logic mapping. Color: {color}");
-        }
-
-        // translate the SequenceItem of the game logic (A-H) to the color of the button
-        public Color GetColorFromSequenceItem(SequenceItem item)
-        {
-            switch (item)
-            {
-                case SequenceItem.A: return Color.Red;
-                case SequenceItem.B: return Color.Green;
-                case SequenceItem.C: return Color.Blue;
-                case SequenceItem.D: return Color.Yellow;
-                case SequenceItem.E: return Color.Purple;
-                case SequenceItem.F: return Color.Gray;
-                case SequenceItem.G: return Color.Brown;
-                case SequenceItem.H: return Color.Orange;
-                case SequenceItem.N: return Color.Empty;
-                default: throw new ArgumentException("Unknown SequenceItem for game logic mapping.");
-            }
         }
     }
 }

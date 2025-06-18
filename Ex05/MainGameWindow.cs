@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
+using static Ex05.GameLogicManager;
 
 namespace Ex05
 {
@@ -23,6 +24,7 @@ namespace Ex05
         public MainGameWindow()
         {
             Text = "Bul-Pgiah!";
+            this.BackColor = Color.Beige;
             StartPosition = FormStartPosition.CenterScreen;
             r_gameSetupWindow.m_StartBtn.MouseClick += M_StartBtn_MouseClick;
             r_gameSetupWindow.ShowDialog();
@@ -47,6 +49,7 @@ namespace Ex05
             int buttonSpacing = 10;
             int leftMargin = 10;
             int topMargin = 15;
+            int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing + 5;
 
             this.AutoSize = true;
             this.MaximizeBox = false;
@@ -54,7 +57,7 @@ namespace Ex05
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < r_LogicManager.m_secretsequence.Length; i++)
             {
                 Button SecretButton = new Button();
                 SecretButton.Width = secretButtonWidth;
@@ -65,9 +68,6 @@ namespace Ex05
                 SecretButton.Enabled = false;
                 Controls.Add(SecretButton);
             }
-
-
-            int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing + 5;
 
             for (int i = 0; i < r_NumberOfGuesses; i++)
             {
@@ -103,7 +103,7 @@ namespace Ex05
             bool allButtonsFilled = true;
             foreach (Button button in currentGuess.r_ChoiceButtons)//search for empty buttons in the current guess
             {
-                if (button.BackColor == SystemColors.Control)
+                if (button.BackColor == Color.Beige)
                 {
                     allButtonsFilled = false;
                     break;
@@ -123,15 +123,47 @@ namespace Ex05
         private GameLogicManager.SequenceItem getSequenceItemFromButtonColor(Button i_Button)
         {
             Color buttonColor = i_Button.BackColor;
-            return r_LogicManager.GetSequenceItemFromColor(buttonColor);
+            return GetSequenceItemFromColor(buttonColor);
         }
 
         // Convert SequenceItem to color
         private Color getColorFromSequenceItem(GameLogicManager.SequenceItem item)
         {
-            return r_LogicManager.GetColorFromSequenceItem(item);
+            return GetColorFromSequenceItem(item);
+        }
+        // translate the color of the button to the chars of the game logic (A-H)
+        public GameLogicManager.SequenceItem GetSequenceItemFromColor(Color color)
+        {
+            if (color == Color.Red) return GameLogicManager.SequenceItem.A;
+            if (color == Color.Green) return GameLogicManager.SequenceItem.B;
+            if (color == Color.Blue) return GameLogicManager.SequenceItem.C;
+            if (color == Color.Yellow) return GameLogicManager.SequenceItem.D;
+            if (color == Color.Purple) return GameLogicManager.SequenceItem.E;
+            if (color == Color.Gray) return GameLogicManager.SequenceItem.F;
+            if (color == Color.Brown) return     GameLogicManager.SequenceItem.G;
+            if (color == Color.Orange) return GameLogicManager.SequenceItem.H;
+            if (color == Color.Beige) return GameLogicManager.SequenceItem.N;
+
+            throw new ArgumentException($"Unknown color for game logic mapping. Color: {color}");
         }
 
+        // translate the SequenceItem of the game logic (A-H) to the color of the button
+        public Color GetColorFromSequenceItem(SequenceItem item)
+        {
+            switch (item)
+            {
+                case GameLogicManager.SequenceItem.A: return Color.Red;
+                case GameLogicManager.SequenceItem.B: return Color.Green;
+                case GameLogicManager.SequenceItem.C: return Color.Blue;
+                case GameLogicManager.SequenceItem.D: return Color.Yellow;
+                case GameLogicManager.SequenceItem.E: return Color.Purple;
+                case GameLogicManager.SequenceItem.F: return Color.Gray;
+                case GameLogicManager.SequenceItem.G: return Color.Brown;
+                case GameLogicManager.SequenceItem.H: return Color.Orange;
+                case GameLogicManager.SequenceItem.N: return Color.Beige;
+                default: throw new ArgumentException("Unknown SequenceItem for game logic mapping.");
+            }
+        }
         // Check if the guess is valid
         private bool isGuessValid(ButtonCollectionForSingleGuess i_Guess)
         {
