@@ -3,45 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace Ex05
 {
     internal class GameLogicManager
     {
-        // $G$ CSS-999 (-3) Bad data members names (should be in k_PascalCase and m_PascalCase).
-        public const int k_amountOfItemsInSequence = 4;
-        public const int k_maximumAnountOfGuesses = 10;
-        public const int k_minumumAmountOfGuesses = 4;
-        public const int k_amountOfOptionsForSequanceItems = 8;
+        public const int k_AmountOfItemsInSequence = 4;
+        public const int k_MaximumAnountOfGuesses = 10;
+        public const int k_MinumumAmountOfGuesses = 4;
+        public const int k_AmountOfOptionsForSequanceItems = 8;
+
+        public enum SequenceItem
+        {
+            A = 0,
+            B = 1,
+            C = 2,
+            D = 3,
+            E = 4,
+            F = 5,
+            G = 6,
+            H = 7,
+            N = 8 // N is for empty button
+        }
 
         public List<Guess> m_guessList = new List<Guess>();
-        // $G$ CSS-999 (-3) The data members should have access modifiers.
-        private Random m_sequenceItemRandomizer = new Random();
-        private char[] m_secretsequence = new char[k_amountOfItemsInSequence];
+            private Random m_sequenceItemRandomizer = new Random();
+        private SequenceItem[] m_secretsequence = new SequenceItem[k_AmountOfItemsInSequence];
         public int MaxGuesses { get; set; }
         public int CurrentGuessCount { get; private set; }
 
         public class Guess
         {
-            public char[] m_guess;
+            public SequenceItem[] m_guess;
             public int Hits { get; set; }
             public int Misses { get; set; }
 
-            public Guess(char[] i_guess)
+            public Guess(SequenceItem[] i_guess)
             {
                 m_guess = i_guess;
             }
-
         }
 
         public bool CheckWin()
         {
-            bool isWin = (m_guessList.Last().Hits == k_amountOfItemsInSequence);
-
+            bool isWin = (m_guessList.Last().Hits == k_AmountOfItemsInSequence);
             return isWin;
         }
 
-        public void SetSecretSequence(char[] i_sequenceItems)
+        public void SetSecretSequence(SequenceItem[] i_sequenceItems)
         {
             m_secretsequence = i_sequenceItems;
         }
@@ -52,31 +63,29 @@ namespace Ex05
             m_guessList.Clear();
         }
 
-        public bool SequenceHasNoDuplicates(char[] i_input)
+        public bool SequenceHasNoDuplicates(SequenceItem[] i_input)
         {
-            bool hasNoDuplicates = true;
-            Dictionary<char, bool> existingCharsInSequence = new Dictionary<char, bool>();
-
-            for (int i = 0; i < k_amountOfItemsInSequence; i++)
+            bool isNotDuplicate = true;
+            HashSet<SequenceItem> seen = new HashSet<SequenceItem>();
+            foreach (SequenceItem item in i_input)
             {
-                char currentLetterToCheck = char.ToUpper(i_input[i]);
-
-                if (existingCharsInSequence.ContainsKey(currentLetterToCheck))
+                if (item == SequenceItem.N)
                 {
-                    hasNoDuplicates = false;
-                    break;
+                    continue; // Ignore empty slots
+                }
+                if (seen.Contains(item))
+                {
+                    isNotDuplicate = false; // Duplicate found
                 }
                 else
                 {
-                    existingCharsInSequence[currentLetterToCheck] = true;
+                    seen.Add(item);
                 }
-
             }
-
-            return hasNoDuplicates;
+            return isNotDuplicate;
         }
 
-        public void CheckGuess(char[] i_guess)
+        public void CheckGuess(SequenceItem[] i_guess)
         {
             int hits = 0;
             int misses = 0;
@@ -87,7 +96,7 @@ namespace Ex05
             {
                 for (int SequenceIndex = 0; SequenceIndex < i_guess.Length; SequenceIndex++)
                 {
-                    if (i_guess[inputIndex].Equals(m_secretsequence[SequenceIndex]) == true)
+                    if (i_guess[inputIndex] == m_secretsequence[SequenceIndex])
                     {
                         if (inputIndex == SequenceIndex)
                         {
@@ -97,11 +106,8 @@ namespace Ex05
                         {
                             misses++;
                         }
-
                     }
-
                 }
-
             }
 
             guess.Misses = misses;
@@ -112,35 +118,63 @@ namespace Ex05
         public bool CheckLoss()
         {
             bool didPlayerLose = MaxGuesses - 1 < CurrentGuessCount;
-
             return didPlayerLose;
         }
 
         public void GenerateSequence()
         {
-            char[] sequence;
-
+            SequenceItem[] sequence;
             do
             {
                 sequence = createRandomSequence();
             }
-            while (SequenceHasNoDuplicates(sequence) == false);
-
+            while (!SequenceHasNoDuplicates(sequence));
             m_secretsequence = sequence;
         }
 
-        private char[] createRandomSequence()
+        private SequenceItem[] createRandomSequence()
         {
-            // $G$ DSN-999 (-3) Sequence of elements should be represented as sequence of enum values and not as a string or char.
-            char[] sequence = new char[k_amountOfItemsInSequence];
-
+            SequenceItem[] sequence = new SequenceItem[k_AmountOfItemsInSequence];
             for (int i = 0; i < sequence.Length; i++)
             {
-                sequence[i] = (char)m_sequenceItemRandomizer.Next('A', 'I');
+                // Only use A-H (0-7)
+                sequence[i] = (SequenceItem)m_sequenceItemRandomizer.Next(0, 8);
             }
-
             return sequence;
         }
 
+        // translate the color of the button to the chars of the game logic (A-H)
+        public SequenceItem GetSequenceItemFromColor(Color color)
+        {
+            if (color == Color.Red) return SequenceItem.A;
+            if (color == Color.Green) return SequenceItem.B;
+            if (color == Color.Blue) return SequenceItem.C;
+            if (color == Color.Yellow) return SequenceItem.D;
+            if (color == Color.Purple) return SequenceItem.E;
+            if (color == Color.Gray) return SequenceItem.F;
+            if (color == Color.Brown) return SequenceItem.G;
+            if (color == Color.Orange) return SequenceItem.H;
+            if (color == Color.Empty || color.ToArgb() == SystemColors.Control.ToArgb()) return SequenceItem.N;
+
+            throw new ArgumentException($"Unknown color for game logic mapping. Color: {color}");
+        }
+
+        // translate the SequenceItem of the game logic (A-H) to the color of the button
+        public Color GetColorFromSequenceItem(SequenceItem item)
+        {
+            switch (item)
+            {
+                case SequenceItem.A: return Color.Red;
+                case SequenceItem.B: return Color.Green;
+                case SequenceItem.C: return Color.Blue;
+                case SequenceItem.D: return Color.Yellow;
+                case SequenceItem.E: return Color.Purple;
+                case SequenceItem.F: return Color.Gray;
+                case SequenceItem.G: return Color.Brown;
+                case SequenceItem.H: return Color.Orange;
+                case SequenceItem.N: return Color.Empty;
+                default: throw new ArgumentException("Unknown SequenceItem for game logic mapping.");
+            }
+        }
     }
 }

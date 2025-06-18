@@ -17,7 +17,7 @@ namespace Ex05
         {
             m_CurrentGuessNumber++;
             ButtonCollectionForSingleGuess nextGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
-            foreach(Button button in nextGuess.r_ChoiceButtons)
+            foreach (Button button in nextGuess.r_ChoiceButtons)
             {
                 button.Enabled = true;
             }
@@ -52,6 +52,9 @@ namespace Ex05
             int topMargin = 20;
 
             this.AutoSize = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
             for (int i = 0; i < 4; i++)
@@ -76,7 +79,7 @@ namespace Ex05
                 {
                     Controls.Add(button);
                 }
-                foreach(Button choiceButton in r_ButtonSetsForGuesses[i].r_ChoiceButtons)
+                foreach (Button choiceButton in r_ButtonSetsForGuesses[i].r_ChoiceButtons)
                 {
                     choiceButton.Click += ChoiceButton_Click;
                 }
@@ -91,6 +94,49 @@ namespace Ex05
         {
             ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button);
             colorChoiceWindow.ShowDialog();
+            enableSubmitButtonIfLastChoiceButton(sender as Button);
+        }
+
+        // if the current choice button is the last one in the row, it will enable the submit button
+        private void enableSubmitButtonIfLastChoiceButton(Button i_ChoiceButton)
+        {
+            if (!isGuessValid(r_ButtonSetsForGuesses[m_CurrentGuessNumber]))
+            {
+                MessageBox.Show("Invalid guess! Please choose a sequence with no duplicates.", "Invalid Guess", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
+                if (currentGuess.r_ChoiceButtons.IndexOf(i_ChoiceButton) == currentGuess.r_ChoiceButtons.Count - 1)
+                {
+                    currentGuess.SubmitButton.Enabled = true;
+                }
+            }
+        }
+
+        // Convert button color to SequenceItem
+        private GameLogicManager.SequenceItem getSequenceItemFromButtonColor(Button i_Button)
+        {
+            Color buttonColor = i_Button.BackColor;
+            return r_LogicManager.GetSequenceItemFromColor(buttonColor);
+        }
+
+        // Convert SequenceItem to color
+        private Color getColorFromSequenceItem(GameLogicManager.SequenceItem item)
+        {
+            return r_LogicManager.GetColorFromSequenceItem(item);
+        }
+
+        // Check if the guess is valid
+        private bool isGuessValid(ButtonCollectionForSingleGuess i_Guess)
+        {
+            GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+            for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
+            {
+                guessItems[i] = getSequenceItemFromButtonColor(i_Guess.r_ChoiceButtons[i]);
+            }
+            return r_LogicManager.SequenceHasNoDuplicates(guessItems);
         }
     }
 }
