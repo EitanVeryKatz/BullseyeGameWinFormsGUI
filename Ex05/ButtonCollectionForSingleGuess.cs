@@ -19,7 +19,7 @@ namespace Ex05
         private Button m_ResultButton2 = new Button();
         private Button m_ResultButton3 = new Button();
         private Button m_ResultButton4 = new Button();
-        public List<Button> r_ResultButtons { get; } = new List<Button>();
+        public List<Button> ResultButtons { get; } = new List<Button>();
         public Button SubmitButton
         {
             get { return m_SubmitButton; }
@@ -37,9 +37,10 @@ namespace Ex05
             submitButtonSetup(buttonWidth, buttonHeight, i_Height, buttonSpacing);
             resultButtonsSetup(resultButtonSize, buttonSpacing, i_Height, resultVerticalSpacing);
             addButtonsToCollections();
-            foreach (Button button in r_AllButtons) 
+            MakeAllButtonsGlossy();
+            foreach (Button button in r_AllButtons)
             {
-                button.Enabled = false; 
+                button.Enabled = false;
             }
         }
 
@@ -107,10 +108,45 @@ namespace Ex05
             r_ChoiceButtons.Add(m_ChoiceButton2);
             r_ChoiceButtons.Add(m_ChoiceButton3);
             r_ChoiceButtons.Add(m_ChoiceButton4);
-            r_ResultButtons.Add(m_ResultButton1);
-            r_ResultButtons.Add(m_ResultButton2);
-            r_ResultButtons.Add(m_ResultButton3);
-            r_ResultButtons.Add(m_ResultButton4);
+            ResultButtons.Add(m_ResultButton1);
+            ResultButtons.Add(m_ResultButton2);
+            ResultButtons.Add(m_ResultButton3);
+            ResultButtons.Add(m_ResultButton4);
+        }
+
+        private void MakeButtonGlossy(Button i_Button)
+        {
+            i_Button.FlatStyle = FlatStyle.Flat;
+            i_Button.FlatAppearance.BorderSize = 0;
+            i_Button.BackColor = Color.Beige;
+            i_Button.ForeColor = Color.White;
+            i_Button.Paint += (sender, e) =>
+            {
+                Button btn = sender as Button;
+                Graphics g = e.Graphics;
+                Rectangle glossRect = new Rectangle(0, 0, btn.Width, btn.Height / 2);
+                using (LinearGradientBrush glossBrush = new LinearGradientBrush(glossRect,
+                    Color.FromArgb(180, Color.White), Color.FromArgb(0, Color.White), LinearGradientMode.Vertical))
+                {
+                    g.FillRectangle(glossBrush, glossRect);
+                }
+
+                using (Pen borderPen = new Pen(Color.DarkGray))
+                {
+                    g.DrawRectangle(borderPen, 0, 0, btn.Width - 1, btn.Height - 1);
+                }
+            };
+        }
+
+        private void MakeAllButtonsGlossy()
+        {
+            foreach(Button button in r_AllButtons)
+            {
+                if (button != m_SubmitButton) 
+                {
+                    MakeButtonGlossy(button);
+                }
+            }
         }
     }
 }

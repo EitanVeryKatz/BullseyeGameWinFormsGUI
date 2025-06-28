@@ -11,7 +11,7 @@ namespace Ex05
         private readonly Button r_ChosenButton;
         private readonly List<Button> r_ColorButtons = new List<Button>();
 
-        public ColorChoiceWindow(Button i_ChosenButton,Color[] i_colors)
+        public ColorChoiceWindow(Button i_ChosenButton, Color[] i_colors)
         {
             r_ChosenButton = i_ChosenButton;
             initializeForm();
@@ -21,15 +21,15 @@ namespace Ex05
 
         private void initializeForm()
         {
-            this.ClientSize = new Size(225, 129);
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.Name = nameof(ColorChoiceWindow);
-            this.ResumeLayout(false);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.ShowInTaskbar = false;
-            this.Text = "Pick A Color:";
+            ClientSize = new Size(225, 129);
+            StartPosition = FormStartPosition.CenterParent;
+            Name = nameof(ColorChoiceWindow);
+            ResumeLayout(false);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            ShowInTaskbar = false;
+            Text = "Pick A Color:";
         }
 
         private void createColorButtons(Color[] i_colors)
@@ -44,16 +44,17 @@ namespace Ex05
             addColorButton(i_colors[7], 168, 70);
         }
 
-        private void addColorButton(Color color, int x, int y)
+        private void addColorButton(Color i_Color, int i_XPosition, int i_YPosition)
         {
             Button button = new Button
             {
-                BackColor = color,
+                BackColor = i_Color,
                 Size = new Size(30, 30),
-                Location = new Point(x, y),
+                Location = new Point(i_XPosition, i_YPosition),
                 UseVisualStyleBackColor = false
             };
-            button.Click += ColorButton_Click;
+
+            button.Click += colorButton_Click;
             r_ColorButtons.Add(button);
         }
 
@@ -61,16 +62,16 @@ namespace Ex05
         {
             foreach (Button button in r_ColorButtons)
             {
-                this.Controls.Add(button);
+                Controls.Add(button);
             }
         }
 
-        private void ColorButton_Click(object sender, EventArgs e)
+        private void colorButton_Click(object sender, EventArgs e)
         {
             Button chosenColor = sender as Button;
+
             r_ChosenButton.BackColor = chosenColor.BackColor;
             Close();
         }
-        
     }
 }

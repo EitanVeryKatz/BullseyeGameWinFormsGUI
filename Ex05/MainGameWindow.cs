@@ -16,8 +16,8 @@ namespace Ex05
         private int r_NumberOfGuesses = 0;
         private readonly Dictionary<int, ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int, ButtonCollectionForSingleGuess>();
         private int m_CurrentGuessNumber = -1;
-        private readonly Dictionary<Color, GameLogicManager.SequenceItem> r_ColorsToSequanceItems = new Dictionary<Color, SequenceItem>();
-        private readonly Dictionary<GameLogicManager.SequenceItem, Color> r_SetuanceItemsToColors = new Dictionary<SequenceItem, Color>();
+        private readonly Dictionary<Color, GameLogicManager.eSequenceItem> r_ColorsToSequanceItems = new Dictionary<Color, eSequenceItem>();
+        private readonly Dictionary<GameLogicManager.eSequenceItem, Color> r_SetuanceItemsToColors = new Dictionary<eSequenceItem, Color>();
         
         private void startNextGuess()
         {
@@ -47,16 +47,16 @@ namespace Ex05
             
           
 
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.A] = Color.Gold;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.B] = Color.Red;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.C] = Color.Blue;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.D] = Color.Green;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.E] = Color.Magenta;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.F] = Color.DeepSkyBlue;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.G] = Color.DarkGray;
-            r_SetuanceItemsToColors[GameLogicManager.SequenceItem.H] = Color.Tomato;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.A] = Color.Gold;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.B] = Color.Red;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.C] = Color.Blue;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.D] = Color.Green;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.E] = Color.Magenta;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.F] = Color.DeepSkyBlue;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.G] = Color.DarkGray;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.H] = Color.Tomato;
 
-            foreach(KeyValuePair<GameLogicManager.SequenceItem,Color> translationPair in r_SetuanceItemsToColors)
+            foreach(KeyValuePair<GameLogicManager.eSequenceItem,Color> translationPair in r_SetuanceItemsToColors)
             {
                 r_ColorsToSequanceItems[translationPair.Value] = translationPair.Key;
             }
@@ -86,7 +86,7 @@ namespace Ex05
 
 
 
-            for (int i = 0; i < r_LogicManager.m_secretsequence.Length; i++)
+            for (int i = 0; i < r_LogicManager.m_Secretsequence.Length; i++)
             {
                 Button SecretButton = new Button();
                 SecretButton.Width = secretButtonWidth;
@@ -161,7 +161,7 @@ namespace Ex05
         // Check if the guess is valid
         private bool isGuessValid(ButtonCollectionForSingleGuess i_Guess)
         {
-            GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+            GameLogicManager.eSequenceItem[] guessItems = new GameLogicManager.eSequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 guessItems[i] = r_ColorsToSequanceItems[i_Guess.r_ChoiceButtons[i].BackColor];
@@ -191,7 +191,7 @@ namespace Ex05
         private void SubmitButton_Click(object sender, EventArgs e)
         {
             ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
-            GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+            GameLogicManager.eSequenceItem[] guessItems = new GameLogicManager.eSequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 guessItems[i] = r_ColorsToSequanceItems[currentGuess.r_ChoiceButtons[i].BackColor];
@@ -218,20 +218,20 @@ namespace Ex05
         // Update the result buttons with hits and misses
         private void updateResultButtons(ButtonCollectionForSingleGuess i_Guess)
         {
-            GameLogicManager.Guess guess = r_LogicManager.m_guessList.Last(); // Get the last guess
+            GameLogicManager.Guess guess = r_LogicManager.r_GuessList.Last(); // Get the last guess
             for (int i = 0; i < guess.Hits; i++)
             {
-                i_Guess.r_ResultButtons[i].BackColor = Color.Black; // Black for hits
+                i_Guess.ResultButtons[i].BackColor = Color.Black; // Black for hits
             }
             for (int i = guess.Hits; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 if (i - guess.Hits < guess.Misses)
                 {
-                    i_Guess.r_ResultButtons[i].BackColor = Color.Yellow; // Yellow for misses
+                    i_Guess.ResultButtons[i].BackColor = Color.Yellow; // Yellow for misses
                 }
                 else
                 {
-                    i_Guess.r_ResultButtons[i].BackColor = Color.Empty; // Empty for no hits or misses
+                    i_Guess.ResultButtons[i].BackColor = Color.Empty; // Empty for no hits or misses
                 }
             }
         }
@@ -241,7 +241,7 @@ namespace Ex05
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 Button secretButton = Controls[i] as Button; // Assuming the first 4 buttons are the secret buttons
-                secretButton.BackColor = r_SetuanceItemsToColors[r_LogicManager.m_secretsequence[i]];
+                secretButton.BackColor = r_SetuanceItemsToColors[r_LogicManager.m_Secretsequence[i]];
             }
         }
     }

@@ -13,8 +13,6 @@ namespace Ex05
         public Button m_StartBtn;
         private Button m_CounterBtn;
         private int m_NumberOfGuesses = 4;
-        private GameLogicManager m_GameLogic;
-
         public int NumberOfGuesses
         {
             get
@@ -37,59 +35,57 @@ namespace Ex05
         public GameSetupWindow()
         {
             InitializeComponent();
-            this.ResumeLayout(false);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.ShowInTaskbar = false;
+            ResumeLayout(false);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             m_CounterBtn.MouseClick += M_CounterBtn_MouseClick;
             m_StartBtn.MouseClick += M_StartBtn_MouseClick;
             m_CounterBtn.Text = $"number of guesses: {NumberOfGuesses}";
             m_CounterBtn.Font= new Font("Arial", 10, FontStyle.Bold);
             m_StartBtn.Font = new Font("Arial", 10, FontStyle.Bold);
-            m_GameLogic = new GameLogicManager();
         }
 
         private void InitializeComponent()
         {
-            this.m_StartBtn = new System.Windows.Forms.Button();
-            this.m_CounterBtn = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            m_StartBtn = new System.Windows.Forms.Button();
+            m_CounterBtn = new System.Windows.Forms.Button();
+            SuspendLayout();
             // 
             // m_StartBtn
             // 
-            this.m_StartBtn.Location = new System.Drawing.Point(124, 134);
-            this.m_StartBtn.Name = "m_StartBtn";
-            this.m_StartBtn.Size = new System.Drawing.Size(108, 37);
-            this.m_StartBtn.TabIndex = 0;
-            this.m_StartBtn.Text = "start";
+            m_StartBtn.Location = new System.Drawing.Point(124, 134);
+            m_StartBtn.Name = "m_StartBtn";
+            m_StartBtn.Size = new System.Drawing.Size(108, 37);
+            m_StartBtn.TabIndex = 0;
+            m_StartBtn.Text = "start";
             // 
             // m_CounterBtn
             // 
-            this.m_CounterBtn.Location = new System.Drawing.Point(28, 51);
-            this.m_CounterBtn.Name = "m_CounterBtn";
-            this.m_CounterBtn.Size = new System.Drawing.Size(300, 23);
-            this.m_CounterBtn.TabIndex = 1;
+            m_CounterBtn.Location = new System.Drawing.Point(28, 51);
+            m_CounterBtn.Name = "m_CounterBtn";
+            m_CounterBtn.Size = new System.Drawing.Size(300, 23);
+            m_CounterBtn.TabIndex = 1;
             // 
             // GameSetupWindow
             // 
-            this.ClientSize = new System.Drawing.Size(359, 210);
-            this.Controls.Add(this.m_StartBtn);
-            this.Controls.Add(this.m_CounterBtn);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "GameSetupWindow";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.Text = "Choose Number of Guesses for the Game!";
-            this.ResumeLayout(false);
+            ClientSize = new System.Drawing.Size(359, 210);
+            Controls.Add(m_StartBtn);
+            Controls.Add(m_CounterBtn);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "GameSetupWindow";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            Text = "Choose Number of Guesses for the Game!";
+            ResumeLayout(false);
 
         }
 
         private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
         {
-            m_GameLogic.MaxGuesses = NumberOfGuesses;
             Close();
         }
 
