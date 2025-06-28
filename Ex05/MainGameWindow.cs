@@ -4,46 +4,66 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using static Ex05.GameLogicManager;
+
 
 namespace Ex05
 {
     internal class MainGameWindow : Form
     {
         private readonly GameLogicManager r_LogicManager = new GameLogicManager();
-        private readonly GameSetupWindow r_gameSetupWindow = new GameSetupWindow();
+        private readonly GameSetupWindow r_GameSetupWindow = new GameSetupWindow();
         private int r_NumberOfGuesses = 0;
         private readonly Dictionary<int, ButtonCollectionForSingleGuess> r_ButtonSetsForGuesses = new Dictionary<int, ButtonCollectionForSingleGuess>();
         private int m_CurrentGuessNumber = -1;
-
+        private readonly Dictionary<Color, GameLogicManager.eSequenceItem> r_ColorsToSequanceItems = new Dictionary<Color, GameLogicManager.eSequenceItem>();
+        private readonly Dictionary<GameLogicManager.eSequenceItem, Color> r_SetuanceItemsToColors = new Dictionary<GameLogicManager.eSequenceItem, Color>();
+        
         private void startNextGuess()
         {
             m_CurrentGuessNumber++;
-            enableChoiceButtonsForCurrentGuess();// enable the choice buttons for the next guess
+            enableChoiceButtonsForCurrentGuess();
         }
 
         public MainGameWindow()
         {
             Text = "Bul-Pgiah!";
-            this.BackColor = Color.Beige;
+            BackColor = Color.Beige;
             StartPosition = FormStartPosition.CenterScreen;
-            r_gameSetupWindow.m_StartBtn.MouseClick += M_StartBtn_MouseClick;
-            r_gameSetupWindow.ShowDialog();
+            r_GameSetupWindow.m_StartBtn.MouseClick += m_StartBtn_MouseClick;
+            r_GameSetupWindow.ShowDialog();
             if (r_NumberOfGuesses == 0)
             {
                 throw new Exception();
             }
-            InitializeComponent();
+
+            initializeComponents();
+            setColorsForGame();
             r_LogicManager.GenerateSequence();
             startNextGuess();
         }
 
-        private void M_StartBtn_MouseClick(object sender, MouseEventArgs e)
+        private void setColorsForGame()
         {
-            r_NumberOfGuesses = r_gameSetupWindow.NumberOfGuesses;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.A] = Color.Gold;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.B] = Color.Red;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.C] = Color.Blue;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.D] = Color.Green;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.E] = Color.Magenta;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.F] = Color.DeepSkyBlue;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.G] = Color.DarkGray;
+            r_SetuanceItemsToColors[GameLogicManager.eSequenceItem.H] = Color.Tomato;
+            foreach(KeyValuePair<GameLogicManager.eSequenceItem,Color> translationPair in r_SetuanceItemsToColors)
+            {
+                r_ColorsToSequanceItems[translationPair.Value] = translationPair.Key;
+            }
         }
 
-        private void InitializeComponent()
+        private void m_StartBtn_MouseClick(object sender, MouseEventArgs e)
+        {
+            r_NumberOfGuesses = r_GameSetupWindow.NumberOfGuesses;
+        }
+
+        private void initializeComponents()
         {
             int secretButtonWidth = 40;
             int secretButtonHeight = 40;
@@ -52,18 +72,16 @@ namespace Ex05
             int topMargin = 15;
             int guessRowStartY = topMargin + secretButtonHeight + buttonSpacing + 5;
 
-            this.AutoSize = true;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            this.Icon = new Icon(Path.Combine(Application.StartupPath, "bullseye.ico"));
-
-
-
-            for (int i = 0; i < r_LogicManager.m_secretsequence.Length; i++)
+            AutoSize = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Icon = new Icon(Path.Combine(Application.StartupPath, "bullseye.ico"));
+            for (int i = 0; i < r_LogicManager.m_Secretsequence.Length; i++)
             {
                 Button SecretButton = new Button();
+
                 SecretButton.Width = secretButtonWidth;
                 SecretButton.Height = secretButtonHeight;
                 SecretButton.BackColor = Color.Black;
@@ -76,36 +94,41 @@ namespace Ex05
             for (int i = 0; i < r_NumberOfGuesses; i++)
             {
                 int rowTop = guessRowStartY + i * (secretButtonHeight + buttonSpacing);
+
                 r_ButtonSetsForGuesses[i] = new ButtonCollectionForSingleGuess(rowTop, leftMargin);
-                foreach (Button button in r_ButtonSetsForGuesses[i].r_Buttons)
+                foreach (Button button in r_ButtonSetsForGuesses[i].r_AllButtons)
                 {
                     Controls.Add(button);
                 }
+
                 foreach (Button choiceButton in r_ButtonSetsForGuesses[i].r_ChoiceButtons)
                 {
-                    choiceButton.Click += ChoiceButton_Click;
+                    choiceButton.Click += choiceButton_Click;
                 }
+
                 r_ButtonSetsForGuesses[i].SubmitButton.Click += SubmitButton_Click;
             }
 
             int totalHeight = guessRowStartY + r_NumberOfGuesses * (secretButtonHeight + buttonSpacing) + topMargin;
             int totalWidth = leftMargin + 4 * (secretButtonWidth + buttonSpacing) + leftMargin;
-            this.ClientSize = new Size(totalWidth, totalHeight);
+
+            ClientSize = new Size(totalWidth, totalHeight);
         }
 
-        private void ChoiceButton_Click(object sender, EventArgs e)
+        private void choiceButton_Click(object sender, EventArgs e)
         {
-            ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button);
+            ColorChoiceWindow colorChoiceWindow = new ColorChoiceWindow(sender as Button,r_SetuanceItemsToColors.Values.ToArray());
+
             colorChoiceWindow.ShowDialog();
             enableSubmitButtonIfGuessFilledAndValid();
         }
 
-        // if the current row doesnt contain empty buttons and the guess is valid, it will enable the submit button
         private void enableSubmitButtonIfGuessFilledAndValid()
         {
             ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
             bool allButtonsFilled = true;
-            foreach (Button button in currentGuess.r_ChoiceButtons)//search for empty buttons in the current guess
+
+            foreach (Button button in currentGuess.r_ChoiceButtons)
             {
                 if (button.BackColor == Color.Beige)
                 {
@@ -113,6 +136,7 @@ namespace Ex05
                     break;
                 }
             }
+
             if (allButtonsFilled && isGuessValid(currentGuess))
             {
                 currentGuess.SubmitButton.Enabled = true;
@@ -123,133 +147,96 @@ namespace Ex05
             }
         }
 
-        // Convert button color to SequenceItem
-        private GameLogicManager.SequenceItem getSequenceItemFromButtonColor(Button i_Button)
-        {
-            Color buttonColor = i_Button.BackColor;
-            return GetSequenceItemFromColor(buttonColor);
-        }
-
-        // Convert SequenceItem to color
-        private Color getColorFromSequenceItem(GameLogicManager.SequenceItem item)
-        {
-            return GetColorFromSequenceItem(item);
-        }
-        // translate the color of the button to the chars of the game logic (A-H)
-        public GameLogicManager.SequenceItem GetSequenceItemFromColor(Color color)
-        {
-            if (color == Color.Red) return GameLogicManager.SequenceItem.A;
-            if (color == Color.Green) return GameLogicManager.SequenceItem.B;
-            if (color == Color.Blue) return GameLogicManager.SequenceItem.C;
-            if (color == Color.Yellow) return GameLogicManager.SequenceItem.D;
-            if (color == Color.Purple) return GameLogicManager.SequenceItem.E;
-            if (color == Color.Gray) return GameLogicManager.SequenceItem.F;
-            if (color == Color.Brown) return     GameLogicManager.SequenceItem.G;
-            if (color == Color.Orange) return GameLogicManager.SequenceItem.H;
-            if (color == Color.Beige) return GameLogicManager.SequenceItem.N;
-
-            throw new ArgumentException($"Unknown color for game logic mapping. Color: {color}");
-        }
-
-        // translate the SequenceItem of the game logic (A-H) to the color of the button
-        public Color GetColorFromSequenceItem(SequenceItem item)
-        {
-            switch (item)
-            {
-                case GameLogicManager.SequenceItem.A: return Color.Red;
-                case GameLogicManager.SequenceItem.B: return Color.Green;
-                case GameLogicManager.SequenceItem.C: return Color.Blue;
-                case GameLogicManager.SequenceItem.D: return Color.Yellow;
-                case GameLogicManager.SequenceItem.E: return Color.Purple;
-                case GameLogicManager.SequenceItem.F: return Color.Gray;
-                case GameLogicManager.SequenceItem.G: return Color.Brown;
-                case GameLogicManager.SequenceItem.H: return Color.Orange;
-                case GameLogicManager.SequenceItem.N: return Color.Beige;
-                default: throw new ArgumentException("Unknown SequenceItem for game logic mapping.");
-            }
-        }
-        // Check if the guess is valid
         private bool isGuessValid(ButtonCollectionForSingleGuess i_Guess)
         {
-            GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+            GameLogicManager.eSequenceItem[] guessItems = new GameLogicManager.eSequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
-                guessItems[i] = getSequenceItemFromButtonColor(i_Guess.r_ChoiceButtons[i]);
+                guessItems[i] = r_ColorsToSequanceItems[i_Guess.r_ChoiceButtons[i].BackColor];
+                
             }
+
             return r_LogicManager.SequenceHasNoDuplicates(guessItems);
         }
-        //disable the choice buttons of the current guess
+        
         private void disableChoiceButtonsForCurrentGuess()
         {
             ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
+
             foreach (Button button in currentGuess.r_ChoiceButtons)
             {
                 button.Enabled = false;
             }
         }
-        //enable the choice buttons for the current guess
+        
         private void enableChoiceButtonsForCurrentGuess()
         {
             ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
+
             foreach (Button button in currentGuess.r_ChoiceButtons)
             {
                 button.Enabled = true;
             }
         }
-        //when the submit button is clicked, it will check the guess and update the result buttons
+
         private void SubmitButton_Click(object sender, EventArgs e)
         {
             ButtonCollectionForSingleGuess currentGuess = r_ButtonSetsForGuesses[m_CurrentGuessNumber];
-            GameLogicManager.SequenceItem[] guessItems = new GameLogicManager.SequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+            GameLogicManager.eSequenceItem[] guessItems = new GameLogicManager.eSequenceItem[GameLogicManager.k_AmountOfItemsInSequence];
+
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
-                guessItems[i] = getSequenceItemFromButtonColor(currentGuess.r_ChoiceButtons[i]);// convert button color to SequenceItem
+                guessItems[i] = r_ColorsToSequanceItems[currentGuess.r_ChoiceButtons[i].BackColor];
             }
+
             r_LogicManager.CheckGuess(guessItems);
-
-            if (m_CurrentGuessNumber >= 0)// if this is not the first guess, disable the choice buttons of the previous guess
+            if (m_CurrentGuessNumber >= 0)
             {
-                disableChoiceButtonsForCurrentGuess(); // disable the choice buttons of the previous guess
-                r_ButtonSetsForGuesses[m_CurrentGuessNumber].SubmitButton.Enabled = false; // disable the submit button of the previous guess
-
+                disableChoiceButtonsForCurrentGuess();
+                r_ButtonSetsForGuesses[m_CurrentGuessNumber].SubmitButton.Enabled = false;
             }
-            updateResultButtons(currentGuess); // Update the result buttons with hits and misses
-            if (m_CurrentGuessNumber + 1 >= r_NumberOfGuesses || r_LogicManager.CheckWin())//lose or win
+
+            updateResultButtons(currentGuess);
+            if (m_CurrentGuessNumber + 1 >= r_NumberOfGuesses || r_LogicManager.CheckWin())
             {
-                setSecretButtonsToCorrectSequence(); // Set the secret buttons to the correct sequence
+                setSecretButtonsToCorrectSequence();
             }
             else
             {
                 startNextGuess();
             }
         }
-        // Update the result buttons with hits and misses
+
         private void updateResultButtons(ButtonCollectionForSingleGuess i_Guess)
         {
-            GameLogicManager.Guess guess = r_LogicManager.m_guessList.Last(); // Get the last guess
+            GameLogicManager.Guess guess = r_LogicManager.r_GuessList.Last();
+
             for (int i = 0; i < guess.Hits; i++)
             {
-                i_Guess.r_ResultButtons[i].BackColor = Color.Black; // Black for hits
+                i_Guess.ResultButtons[i].BackColor = Color.Black;
             }
+
             for (int i = guess.Hits; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 if (i - guess.Hits < guess.Misses)
                 {
-                    i_Guess.r_ResultButtons[i].BackColor = Color.Yellow; // Yellow for misses
+                    i_Guess.ResultButtons[i].BackColor = Color.Yellow;
                 }
                 else
                 {
-                    i_Guess.r_ResultButtons[i].BackColor = Color.Empty; // Empty for no hits or misses
+                    i_Guess.ResultButtons[i].BackColor = Color.Empty;
                 }
             }
         }
-        //set the background color of the secret buttons to the correct sequence
+        
         private void setSecretButtonsToCorrectSequence()
         {
             for (int i = 0; i < GameLogicManager.k_AmountOfItemsInSequence; i++)
             {
                 Button secretButton = Controls[i] as Button; // Assuming the first 4 buttons are the secret buttons
-                secretButton.BackColor = getColorFromSequenceItem(r_LogicManager.m_secretsequence[i]);
+
+                secretButton.BackColor = r_SetuanceItemsToColors[r_LogicManager.m_Secretsequence[i]];
             }
         }
     }

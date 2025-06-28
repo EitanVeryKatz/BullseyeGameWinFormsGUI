@@ -13,6 +13,7 @@ namespace Ex05
             try
             {
                 MainGameWindow mainGameWindow = new MainGameWindow();
+
                 mainGameWindow.ShowDialog();
             } catch (Exception)
             {
