@@ -36,7 +36,6 @@ namespace Ex05
             submitButtonSetup(buttonWidth, buttonHeight, i_Height, buttonSpacing);
             resultButtonsSetup(resultButtonSize, buttonSpacing, i_Height, resultVerticalSpacing);
             addButtonsToCollections();
-            MakeAllButtonsGlossy();
             foreach (Button button in r_AllButtons)
             {
                 button.Enabled = false;
@@ -111,41 +110,6 @@ namespace Ex05
             ResultButtons.Add(m_ResultButton2);
             ResultButtons.Add(m_ResultButton3);
             ResultButtons.Add(m_ResultButton4);
-        }
-
-        private void MakeButtonGlossy(Button i_Button)
-        {
-            i_Button.FlatStyle = FlatStyle.Flat;
-            i_Button.FlatAppearance.BorderSize = 0;
-            i_Button.BackColor = Color.Beige;
-            i_Button.ForeColor = Color.White;
-            i_Button.Paint += (sender, e) =>
-            {
-                Button btn = sender as Button;
-                Graphics g = e.Graphics;
-                Rectangle glossRect = new Rectangle(0, 0, btn.Width, btn.Height / 2);
-                using (LinearGradientBrush glossBrush = new LinearGradientBrush(glossRect,
-                    Color.FromArgb(180, Color.White), Color.FromArgb(0, Color.White), LinearGradientMode.Vertical))
-                {
-                    g.FillRectangle(glossBrush, glossRect);
-                }
-
-                using (Pen borderPen = new Pen(Color.DarkGray))
-                {
-                    g.DrawRectangle(borderPen, 0, 0, btn.Width - 1, btn.Height - 1);
-                }
-            };
-        }
-
-        private void MakeAllButtonsGlossy()
-        {
-            foreach(Button button in r_AllButtons)
-            {
-                if (button != m_SubmitButton) 
-                {
-                    MakeButtonGlossy(button);
-                }
-            }
         }
     }
 }
